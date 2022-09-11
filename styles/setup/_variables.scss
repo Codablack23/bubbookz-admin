@@ -1,0 +1,27 @@
+$theme_color:#1DCEFD;
+
+$colors:(
+    "primary":$theme_color,
+    "primary-light":#4FD3F7,
+    "primary-lighter":#80D9F0,
+    "primary-very-light":#B3DFEB,
+    "green":#25D781,
+    "white":#fff,
+    "red":#F26464,
+    "orange":#FFB648,
+    "blue":#3751FF,
+    "sky-blue":#00A7F2,
+    "choco":#1E1E1E,
+    "choco-light":#5C5C5C,
+    "dark-grey":#B8BDC3,
+    "grey":#8E8E8E,
+    "accent":#2f455c,
+    "light-grey":#DAE3E6C3,
+    "dark":#1E1E1E,   
+    "neutral":#22323F
+);
+
+$break_point:(
+    "md":1024px,
+    "sm":480px,
+);

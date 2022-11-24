@@ -15,9 +15,14 @@ interface Response{
     error?:string,
     [key:string]:any
 }
-
+function getEnv(){
+    return {
+        env:process.env.NEXT_PUBLIC_API,
+        api:process.env.NEXT_PUBLIC_API,
+    }
+}
 class Auth{
-    private api = "http://localhost:5505";
+    private api = getEnv().env === "production"?getEnv().api:"https://localhost:5505";
     private config = {
         headers: {"Access-Control-Allow-Origin": "Set-Cookie"},
         withCredentials:true,

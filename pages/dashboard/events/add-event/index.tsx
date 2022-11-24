@@ -338,7 +338,7 @@ export default function AddEvent():JSX.Element{
            const response = await Events.addEvent({
             name,
             contact,
-            date,
+            date:userDate,
             location,
             reg_link,
             location_link,

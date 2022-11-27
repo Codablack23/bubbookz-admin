@@ -22,12 +22,13 @@ interface Response{
 }
 
 class Auth{
-    private api = getEnv().env === "production"?getEnv().api:"https://localhost:5505";
+    private api = getEnv().env == "production"?getEnv().api:"http://localhost:5505";
     private config = {
         headers: {"Access-Control-Allow-Origin": "Set-Cookie"},
         withCredentials:true,
     }
     async loginAdmin(data:UserData):Promise<Response>{
+        console.log(getEnv().api,"API HERE")
        return await axios.post(`${this.api}/admin/login`,data,this.config)
        .then((res)=>{
         return {
@@ -58,6 +59,7 @@ class Auth{
         })
      }
      async logoutAdmin():Promise<Response>{
+        console.log(getEnv().api,"API HERE")
         return await axios.post(`${this.api}/admin/logout`,{},this.config)
         .then((res)=>{
          return {
@@ -73,6 +75,8 @@ class Auth{
         })
      }
      async authenticate():Promise<Response>{
+        console.log(getEnv().api,"API HERE")
+
         return await axios.post(`${this.api}/admin/`,{},this.config)
         .then((res)=>{
          return {

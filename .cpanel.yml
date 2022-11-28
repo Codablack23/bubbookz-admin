@@ -1,5 +1,5 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home2/bubbookz/public_html/admin-bubbookz
+    - export DEPLOYPATH=/home2/bubbookz/public_html/repositories/admin-bubbookz
     - /bin/cp / $DEPLOYPATH

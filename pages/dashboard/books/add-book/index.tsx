@@ -8,6 +8,9 @@ import { DashboardLayout } from "~/components/layouts/DashboardLayout";
 import BookFunction from "~/utils/Book";
 import { validateFields } from "~/utils/validator";
 
+function getApi(){
+  return process.env.NEXT_PUBLIC_API
+}
 const filetypes =["jpeg","jpg","png","svg","jif"]
 interface Errors{
    title?:string,
@@ -34,6 +37,7 @@ interface Errors{
 }
 
 export default function AddBook():JSX.Element{
+
   const router = useRouter()
   const [shown,setShown] = useState(false)
   const [imageUrl,setImageUrl] = useState<string|null>("")
@@ -171,7 +175,7 @@ export default function AddBook():JSX.Element{
   async function handleUpload(e:any){
     e.preventDefault()
     setIsUploading(true)
-    const response =  await axios.post("http://localhost:5505/upload",file,{
+    const response =  await axios.post(`${getApi()}/upload`,file,{
       headers: {
         "Content-Type": "multipart/form-data",
         "Access-Control-Allow-Origin": "Set-Cookie"

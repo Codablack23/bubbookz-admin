@@ -9,7 +9,9 @@ import Events from "~/utils/Events";
 import Router from "next/router";
 
 const filetypes =["jpeg","jpg","png","svg","jif"]
-
+function getApi(){
+  return process.env.NEXT_PUBLIC_API
+}
 interface Host{
    hostname?:string,
    desc?:string,
@@ -52,7 +54,7 @@ function DropzoneWidget({action,title,errors}:DropZoneProps){
   async function handleUpload(e:any){
     e.preventDefault()
     setIsUploading(true)
-    const response =  await axios.post("http://localhost:5505/upload",file,{
+    const response =  await axios.post(`${getApi}/upload`,file,{
       headers: {
         "Content-Type": "multipart/form-data",
         "Access-Control-Allow-Origin": "Set-Cookie"

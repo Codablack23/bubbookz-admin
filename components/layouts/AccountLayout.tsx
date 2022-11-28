@@ -10,7 +10,7 @@ interface LayoutProps{
 
 export default function AccountLayout(props:LayoutProps):JSX.Element{
     return(
-        <div className="p-2 py-6 px-12 bub-container bg-grey min-h-screen min-w- max-w-full">
+        <div className="p-2 py-3 px-12 bub-container bg-grey min-h-screen max-w-full">
          <div className="">
          <Head>
             <title>{props.pageTitle}</title>

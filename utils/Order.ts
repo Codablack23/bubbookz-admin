@@ -22,7 +22,7 @@ interface Response{
 }
 
 class OrdersFunction{
-    private api = getEnv().env == "production"?getEnv().api:"http://localhost:5505";
+    private api = getEnv().api;
     private config = {
         headers: {"Access-Control-Allow-Origin": "Set-Cookie"},
         withCredentials:true,

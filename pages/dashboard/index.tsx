@@ -49,7 +49,7 @@ function getDateRange(rangeType:string){
 }
 
 const SalesOverview=()=>{
-  const [dateRange,seDateType] = useState("monthly")
+  const [dateRange,setDateType] = useState("monthly")
 
   const  options ={
     chart: {
@@ -70,7 +70,7 @@ const SalesOverview=()=>{
       <header className="flex justify-between items-center p-2">
          <h3 className="text-lg "><b>Sales Overview</b></h3>
          <div className="bub-w-25">
-          <Select style={{width:150}} defaultValue="monthly">
+          <Select style={{width:150}} defaultValue="monthly"  value={dateRange} onChange={(value)=>setDateType(value)}>
               <Option value="daily">Daily</Option>
               <Option value="weekly">Weekly</Option>
               <Option value="monthly">Monthly</Option>
@@ -94,7 +94,7 @@ const SalesOverview=()=>{
 }
 
 const UserOverview=()=>{
-  const [dateRange,seDateType] = useState("monthly")
+  const [dateRange,setDateType] = useState("monthly")
 
   
   const  options ={
@@ -117,7 +117,7 @@ const UserOverview=()=>{
        <header className="flex justify-between items-center p-2">
          <h3 className="text-lg "><b>Statistics</b></h3>
          <div className="bub-w-25">
-          <Select style={{width:100}} defaultValue="monthly">
+          <Select style={{width:100}} defaultValue="monthly" value={dateRange} onChange={(value)=>setDateType(value)}>
           <Option value="daily">Daily</Option>
               <Option value="weekly">Weekly</Option>
               <Option value="monthly">Monthly</Option>

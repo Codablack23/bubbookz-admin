@@ -48,7 +48,7 @@ function LoadingState(){
 
 function BookDetail({book}:any){
   const {TabPane} = Tabs
-  const details = book.book_details?JSON.parse(JSON.parse(book.book_details)):[]
+  const details = book.book_details?JSON.parse(book.book_details):[]
   return (
     <>
      <div className="bg-white rounded-lg w-full p-3">

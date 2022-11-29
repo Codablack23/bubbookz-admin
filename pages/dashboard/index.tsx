@@ -9,11 +9,48 @@ import { OrdersList } from "~/data/interfaces";
 import OrdersTable from "~/components/widgets/tables/OrdersTable";
 import  OrdersFunction  from "~/utils/Order";
 const Chart =  dynamic(()=> import( "react-apexcharts"),{ssr:false});
+import moment from "moment";
 import { OrdersContext } from "~/contexts/OrdersContext";
 import { BookContext } from "~/contexts/BookContext";
 import { Select } from "antd";
 
+function getDateRange(rangeType:string){
+  const dates:string[] = []
+  // const date = new Date()
+  // const day = date.getDate()
+  const currentDate = moment()
+  switch (rangeType) {
+    case "daily":
+      for(let i = 0;i < 7;i++){
+        dates.push(moment().date(currentDate.date() - i).format("MMM Do"))
+      }
+    break;
+    case "weekly":
+      for(let i = 0;i < 7;i++){
+        dates.push(moment().date(currentDate.date() - (i + 7)).format("MMM Do"))
+      }
+    break;
+    case "monthly":
+      for(let i = 0;i < 7;i++){
+      dates.push(moment().month(currentDate.month() - i).format("MMM Do"))
+        
+      }
+    break;
+    case "yearly":
+      for(let i = 0;i < 7;i++){
+        dates.push(moment().year(currentDate.year() - i).format("MMM Do"))
+      }
+    break;    
+    default:
+      []
+      break;
+  }
+  return dates
+}
+
 const SalesOverview=()=>{
+  const [dateRange,seDateType] = useState("monthly")
+
   const  options ={
     chart: {
       id: "basic-bar"
@@ -22,7 +59,7 @@ const SalesOverview=()=>{
       enabled: false
     },
     xaxis: {
-      categories: ["Nov 1", "Nov 2", "Nov 3", "Nov 4", "Nov 5", "Nov 5", "Nov 6", "Nov 7"]
+      categories: getDateRange(dateRange)
     }
   }
   const {orders} = useContext(OrdersContext)
@@ -57,6 +94,9 @@ const SalesOverview=()=>{
 }
 
 const UserOverview=()=>{
+  const [dateRange,seDateType] = useState("monthly")
+
+  
   const  options ={
     chart: {
       id: "basic-bar"
@@ -65,7 +105,7 @@ const UserOverview=()=>{
       enabled: false
     },
     xaxis: {
-      categories: ["Nov 1", "Nov 2", "Nov 3", "Nov 4", "Nov 5", "Nov 5", "Nov 6", "Nov 7"]
+      categories: getDateRange(dateRange)
     }
   }
   const {orders} = useContext(OrdersContext)

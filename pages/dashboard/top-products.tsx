@@ -1,4 +1,4 @@
-import Image from "next/image";
+import {Image} from "antd";
 import Link from "next/link";
 import React from "react";
 import BookRating from "~/components/dashboard/booksPage/BookRating";
@@ -10,7 +10,6 @@ const Book:React.FC =()=>{
             <div className="grid-col-3 grid-col-md-12">
               <div className="w-full sm:w-1/2 sm:m-auto lg:w-full">
               <Image
-                layout="responsive" 
                 height={"100%"}
                 width={"100%"}
                 src={"/images/book.svg"}

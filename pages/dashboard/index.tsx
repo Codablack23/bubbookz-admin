@@ -32,13 +32,13 @@ function getDateRange(rangeType:string){
     break;
     case "monthly":
       for(let i = 0;i < 7;i++){
-      dates.push(moment().month(currentDate.month() - i).format("MMM Do"))
+      dates.push(moment().month(currentDate.month() - i).format("MMM"))
         
       }
     break;
     case "yearly":
       for(let i = 0;i < 7;i++){
-        dates.push(moment().year(currentDate.year() - i).format("MMM Do"))
+        dates.push(moment().year(currentDate.year() - i).format("MMM YYY"))
       }
     break;    
     default:

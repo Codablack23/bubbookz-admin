@@ -1,4 +1,4 @@
-import { Table, Tabs } from "antd";
+import { Tabs } from "antd";
 import Link from "next/link";
 import BooksPageTable from "~/components/widgets/tables/tables";
 import { DashboardLayout } from "~/components/layouts/DashboardLayout";

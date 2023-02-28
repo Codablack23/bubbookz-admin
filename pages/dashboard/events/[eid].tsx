@@ -95,7 +95,11 @@ export default function EventDetailPage(){
     const [event,setEvent] = useState<any>({})
     const [isLoading,setisLoading] = useState(true)
 
-    async function getEvent(){
+    const goToEditEventPage=(id:string)=>{
+      return ()=>window.location.replace(`/dashboard/events/edit-event/${id}`)
+    }
+    useEffect(()=>{
+         async function getEvent(){
         if(router.query.eid){
             const response = await Events.getEvent(router.query.eid as string)
             setisLoading(false)
@@ -107,7 +111,6 @@ export default function EventDetailPage(){
             }
         }
     }
-    useEffect(()=>{
       getEvent()
     },[router])
     return(
@@ -133,7 +136,7 @@ export default function EventDetailPage(){
                     <div className="grid-col-8 grid-col-md-12">
                         <header className="flex justify-between">
                             <p className="font-bold text-lg">{event.name}</p>
-                            <button>
+                            <button onClick={goToEditEventPage(event.event_id)}>
                                 <i className="bi bi-pencil text-md"></i>
                             </button>
                         </header>

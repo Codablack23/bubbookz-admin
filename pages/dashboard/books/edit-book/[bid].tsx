@@ -2,9 +2,11 @@ import { Image, message, Modal, Progress, Spin } from "antd";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
 import { DashboardLayout } from "~/components/layouts/DashboardLayout";
+import { LoadingState } from "~/components/widgets/tables/tables";
+import Book from "~/utils/Book";
 import BookFunction from "~/utils/Book";
 import { validateFields } from "~/utils/validator";
 
@@ -36,14 +38,19 @@ interface Errors{
    [key:string]:any
 }
 
-export default function AddBook():JSX.Element{
+interface Book{
+    [key:string]:any
+}
+export default function EditBook():JSX.Element{
 
+  const [book,setBook] = useState<Book>({})
   const router = useRouter()
   const [shown,setShown] = useState(false)
   const [imageUrl,setImageUrl] = useState<string|null>("")
   const [isUploading,setIsUploading] = useState(false)
   const [progress,setProgress] = useState<any>(0)
   const [progressObj,setProgressObj] = useState<any>({})
+  const [isLoadingBook,setIsLoadingBook] = useState(true)
 
   const [title,setTitle] = useState("")
   const [author,setAuthor] = useState("")
@@ -81,7 +88,6 @@ export default function AddBook():JSX.Element{
    }
   }
   async function handleSubmit(e:any){
-    e.preventDefault()
      const fieldErrors = validateFields([
       {inputField:title,inputType:"text",inputName:"Title"},
       {inputField:author,inputType:"text",inputName:"author"},
@@ -110,13 +116,14 @@ export default function AddBook():JSX.Element{
       const err_key:string = err.field as string
       errObj[err_key] = err.error
      })
+     console.log(link)
      setErrors(errObj);
      if(fieldErrors.length === 0){
       if(tags.length < 1){
         message.warning("Please add atleast one tag")
       }else{
         setIsLoading(true)
-        const response = await BookFunction.addBook({
+        const response = await BookFunction.editBook((router.query.bid as string),{
           title,
           author,
           details:JSON.stringify({
@@ -144,21 +151,18 @@ export default function AddBook():JSX.Element{
         })
         setIsLoading(false)
         if(response.status == "success"){
-          message.success("book successfully added")
+          message.success("book updated successfully")
           setTimeout(()=>{
-            router.push(`dashboard/books/${response.book_id}`)
+            router.push(`/dashboard/books/${response.book_id}`)
           },2000)
         }
         else{
           message.error(response.error)
         }
       }
-     }else{
-      message.error("Please clear out all your errors")
      }
   }
-  function handleAddTag(e:any){
-    e.preventDefault()
+  function handleAddTag(){
     const err = validateFields([
       {inputField:tagname,inputType:"text",inputName:"tag"}
     ])
@@ -174,6 +178,48 @@ export default function AddBook():JSX.Element{
     }
   }
   const [file,setFile] = useState<FileList[]|{}>({})
+
+  useEffect(()=>{
+    async function getBook(){
+        if(router.query.bid){
+        //   setIsLoadingBook(true)
+          const response = await BookFunction.getBook(router.query.bid as string)
+          setIsLoadingBook(false)
+          if(response.status === "success"){
+            if(response.book){
+              const resBook = response.book
+              setBook(resBook)
+                const details = JSON.parse(JSON.parse(resBook.book_details))
+
+                setImageUrl(resBook.book_img)
+                setTitle(resBook.title)
+                setAuthor(resBook.author)
+                setISBN(details.ISBN)
+                setWeight(details.weight)
+                setPages(details.pages)
+                setDimension(details.dimensions)
+                setGTN(details.GTN)
+                setFormat(resBook.format)
+                setPublisher(details.publisher)
+                setCopyRight(details.copyright)
+                setLink(resBook.book_link)
+                setDescription(resBook.book_description)
+                setDept(resBook.department)
+                setLevel(resBook.level)
+                setFaculty(resBook.faculty)
+                setSemester(resBook.semester)
+                setPrice(resBook.price)
+                setQuantity(resBook.in_stock)
+                setExpenses(resBook.expenses)
+                setTags(resBook.tags.split(","))
+                setTagList(resBook.tags.split(","))
+
+            }
+          }
+        }
+      }
+      getBook()
+    },[router])
    
   async function handleUpload(e:any){
     e.preventDefault()
@@ -204,14 +250,35 @@ export default function AddBook():JSX.Element{
       console.log(response.file.url)
      }
   }
-
+    const BookLoading = ()=>{
+        return (
+            <div className="h-screen w-full bg-white flex items-center justify-center">
+               <div className="text-center">
+                <Spin/>
+               <p className="font-bold text-lg">Loading Book</p>
+               </div>
+            </div>
+        )
+    }
+    const NotFound=()=>(
+        <div className="h-screen w-full bg-white flex items-center justify-center">
+        <div className="text-center">
+         <h3 className="font-bold text-2xl">Not Found</h3>
+         <p>Sorry the book you are looking does not exist or have been moved</p>
+        </div>
+     </div>
+    )
     return(
-    <DashboardLayout pageTitle={"Add Book"} currentPage={"books"}>
-      <>
+    <DashboardLayout pageTitle={"Edit Book"} currentPage={"books"}>
+      {isLoadingBook?
+      <BookLoading/>
+      :Object.getOwnPropertyNames(book).length == 0?
+      <NotFound/>
+      :<>
       <div className="my-3 flex items-center">
         <Link href={"/dashboard/books"}><a>Books </a></Link>
         <span className="block mx-1"> &gt;</span>
-        <span className="font-bold">Add Book</span></div>
+        <span className="font-bold">Edit Book</span></div>
       <div className="bub-grid mt-4 ">
         <Modal
         footer={false}
@@ -228,8 +295,24 @@ export default function AddBook():JSX.Element{
             </div>
          </div>
         </Modal>
+
+        <Modal
+        footer={false}
+        visible={isLoadingBook}
+        maskClosable={false}
+        centered
+        closable={false}
+        >
+         <div className="flex justify-center items-center">
+            <div className="text-center">
+            <Spin size="large"/>
+            <h3>Uploading Book</h3>
+            <p>This might take a few minutes</p>
+            </div>
+         </div>
+        </Modal>
         <Modal visible={shown} maskClosable={false} footer={false} onCancel={()=>setShown(false)}>
-             <form action="" onSubmit={handleAddTag}>
+             <form action="">
              <h3 className="font-bold text-center">Add Tag</h3>
               <div className="bub__input-container mb-4">
                 <label className="font-bold block mb-1">Name of Tag</label>
@@ -572,8 +655,9 @@ export default function AddBook():JSX.Element{
             </div>
           </div>
        </div>
-      </div>  
+      </div> 
       </>
+      }
     </DashboardLayout>
     )
 }

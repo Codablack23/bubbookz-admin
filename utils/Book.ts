@@ -20,6 +20,11 @@ interface Response{
     error?:string,
     [key:string]:any
 }
+interface Data{
+    answer:string,
+    user:string,
+    [key:string]:any
+}
 
 class BookFunction{
     private api = getEnv().api;
@@ -87,6 +92,38 @@ class BookFunction{
          }
         })
      } 
+     async deleteBook(id:string):Promise<Response>{
+        return await axios.post(`${this.api}/admin/delete-book/${id}`,{},this.config)
+        .then((res)=>{
+         return {
+             ...res.data
+         }
+        })
+        .catch((err)=>{
+         return {
+            status:"network error",
+             error:"connection could not be established",
+             axios_err:err
+         }
+        })
+     } 
+     async answerReview(id:string,data:Data):Promise<Response>{
+        return await axios.post(`${this.api}/admin/answer-review/${id}`,{...data},this.config)
+        .then((res)=>{
+         return {
+             ...res.data
+         }
+        })
+        .catch((err)=>{
+         return {
+            status:"network error",
+             error:"connection could not be established",
+             axios_err:err
+         }
+        })
+     }
+    
+     
 }
 
 export default new BookFunction()
